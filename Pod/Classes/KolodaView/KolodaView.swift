@@ -59,7 +59,7 @@ public protocol KolodaViewDelegate: class {
     func koloda(_ koloda: KolodaView, shouldDragCardAt index: Int ) -> Bool
     func kolodaPanBegan(_ koloda: KolodaView, card: DraggableCardView)
     func kolodaPanFinished(_ koloda: KolodaView, card: DraggableCardView)
-    
+    func kolodaShouldDragOnlyHorizontally(_ koloda: KolodaView) -> Bool
 }
 
 public extension KolodaViewDelegate {
@@ -79,6 +79,7 @@ public extension KolodaViewDelegate {
     func koloda(_ koloda: KolodaView, shouldDragCardAt index: Int ) -> Bool { return true }
     func kolodaPanBegan(_ koloda: KolodaView, card: DraggableCardView) {}
     func kolodaPanFinished(_ koloda: KolodaView, card: DraggableCardView) {}
+    func kolodaShouldDragOnlyHorizontally(_ koloda: KolodaView) -> Bool { return false }
 }
 
 open class KolodaView: UIView, DraggableCardDelegate {
@@ -349,6 +350,10 @@ open class KolodaView: UIView, DraggableCardDelegate {
 
     func card(cardSwipeSpeed card: DraggableCardView) -> DragSpeed {
         return dataSource?.kolodaSpeedThatCardShouldDrag(self) ?? DragSpeed.default
+    }
+
+    func cardShouldForceOnlyHorizontalScroll(_ card: DraggableCardView) -> Bool {
+        return delegate?.kolodaShouldDragOnlyHorizontally(self) ?? false
     }
 
     func card(cardPanBegan card: DraggableCardView) {
